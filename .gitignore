@@ -1,7 +1,7 @@
-# Local .terraform directories (Heavy binaries)
+# Local .terraform directories 
 **/.terraform/*
 
-# .tfstate files (DANGER: These contain your AWS secrets in plain text!)
+
 *.tfstate
 *.tfstate.*
 
