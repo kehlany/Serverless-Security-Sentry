@@ -68,7 +68,7 @@ def lambda_handler(event, context):
         return {"status": "ignored"}
 
     message = f"""
-💸 AWS COST RISK ALERT 💸
+
 
 Severity: {severity}
 Reason: {reason}
