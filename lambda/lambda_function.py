@@ -21,27 +21,26 @@ def lambda_handler(event, context):
     severity = None
     reason = None
 
-    # 🔴 ROOT ACCOUNT — ALWAYS CRITICAL
+    
     if user_type == "Root":
         severity = "CRITICAL"
         reason = "Root account activity detected"
 
-    # 🔴 NAT Gateway — ALWAYS COSTLY
+
     elif event_name == "CreateNatGateway":
         severity = "CRITICAL"
         reason = "NAT Gateway created (hourly billing starts immediately)"
 
-    # 🔴 LOAD BALANCER — NOT FREE
+
     elif event_name == "CreateLoadBalancer":
         severity = "CRITICAL"
         reason = "Load balancer created (hourly cost applies)"
 
-    # 🔴 RDS — HIGH COST RISK
+
     elif event_name in ["CreateDBInstance", "ModifyDBInstance"]:
         severity = "CRITICAL"
         reason = "RDS database created or modified (likely outside Free Tier)"
 
-    # 🟡 EC2 — CHECK INSTANCE TYPE
     elif event_name == "RunInstances":
         instance_type = (
             detail.get("requestParameters", {})
@@ -54,7 +53,7 @@ def lambda_handler(event, context):
         else:
             return {"status": "ignored - free tier EC2"}
 
-    # 🟡 EBS — CHECK SIZE
+
     elif event_name == "CreateVolume":
         size = detail.get("requestParameters", {}).get("size", 0)
 
@@ -64,12 +63,12 @@ def lambda_handler(event, context):
         else:
             return {"status": "ignored - free tier EBS"}
 
-    # ❌ IGNORE EVERYTHING ELSE
+  
     else:
         return {"status": "ignored"}
 
     message = f"""
-💸 AWS COST RISK ALERT 💸
+
 
 Severity: {severity}
 Reason: {reason}
